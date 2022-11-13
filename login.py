@@ -40,9 +40,8 @@ kiwoom.SendOrder("시장가매도", "0101", stock_account, 2, "005930", 10, 0, "
 import pandas
 
 date = '20221111'
-etf = kiwoom.GetCodeListByMarket('8')
 df = kiwoom.block_request('opt20005', #trcode 업종분봉조회요청	
-                          종목코드=etf,
+                          종목코드='069500', #kodex_200
                           output="주식분봉차트조회",
                           기준일자=date,
                           수정주가구분=1,
