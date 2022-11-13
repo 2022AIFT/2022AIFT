@@ -35,3 +35,22 @@ kiwoom.SendOrder("시장가매수", "0101", stock_account, 1, "005930", 10, 0, "
 
 # ---------매도---------
 kiwoom.SendOrder("시장가매도", "0101", stock_account, 2, "005930", 10, 0, "03", "")
+
+# 분봉 데이터 조회
+from pykiwoom.kiwoom import *
+import pandas
+
+tr_dic = {
+  'opt20005': {'001': 'kospi', '201': 'kospi200'},
+  'opt10080': {'069500':'kodex_200', '114800':'kodex_inverse', '226490':'kodex_kospi'}
+}
+date = ''
+tiker = [] #종목 코드
+df = kiwoom.block_request('opt20005',
+                          종목코드=tiker,
+                          output="주식분봉차트조회",
+                          기준일자=date,
+                          수정주가구분=1,
+                          next=0)
+address = '' #csv 파일 저장 경로
+df.to_csv('data.csv')
