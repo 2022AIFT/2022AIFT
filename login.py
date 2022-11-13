@@ -37,7 +37,6 @@ kiwoom.SendOrder("시장가매수", "0101", stock_account, 1, "005930", 10, 0, "
 kiwoom.SendOrder("시장가매도", "0101", stock_account, 2, "005930", 10, 0, "03", "")
 
 # 분봉 데이터 조회
-from pykiwoom.kiwoom import *
 import pandas
 
 tr_dic = {
