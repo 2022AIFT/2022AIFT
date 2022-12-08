@@ -197,4 +197,4 @@ def version(user_id, user_pass, user_cert=None):
 
 if __name__ == "__main__":
     # 실행 전 아이디, 비밀번호, 공동인증서 비밀번호 차례대로 입력
-    version("아이디 입력", "비밀번호", "공동인증서 비밀번호")
+    version("id", "pw", "공동인증서")
