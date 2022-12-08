@@ -2,7 +2,20 @@ import time
 import datetime
 from pykiwoom.kiwoom import *
 
+# 1.
 # https://blog.naver.com/metania/222602334148
+
+# 2.
+# https://trustyou.tistory.com/351
+
+# 3.
+# https://netpilgrim.net/1059
+
+# 4.
+# https://programmingfbf7290.tistory.com/entry/4-%EC%A3%BC%EC%8B%9D-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0-%ED%82%A4%EC%9B%80-open-api-%EC%A3%BC%EC%8B%9D-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%ED%85%8C%EC%8A%A4%ED%8A%B8-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D
+
+#5.
+# https://velog.io/@dingger/%ED%82%A4%EC%9B%80-API-%EC%82%AC%EC%9A%A9-%EC%B2%AB%EA%B1%B8%EC%9D%8C
 
 
 # 시간 측정 시작
