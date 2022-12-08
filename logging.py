@@ -22,3 +22,6 @@ logger.addHandler(file_handler)
 # while True:
 #     logger.info("this is info")
 #     time.sleep(10)
+
+# https://docs.python.org/ko/3.7/howto/logging.html
+# https://hamait.tistory.com/880?category=79136
