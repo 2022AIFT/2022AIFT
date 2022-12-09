@@ -85,7 +85,7 @@ class minute_data():
         if rqname == 'rqname_opt10080':
             self.opt10080(trcode, recordname)
         try:
-            self.tr_event_loop.exit() # 여기서 무한 루프
+            self.tr_event_loop.exit()
         except AttributeError:
             pass
 
@@ -93,5 +93,6 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     min = minute_data()
     min.rq_mindata("069500", 1, 1) # 종목코드, 틱범위, 구분
+    # 받아오는 양이 너무 많아서 이 밑으로 실행 안 됨
     df_min_data = pandas.DataFrame(min.min_data, columns=['date', 'open', 'high', 'low', 'close', 'volume', 'trade_volume'])
     print(df_min_data)
