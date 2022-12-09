@@ -9,8 +9,6 @@ import pandas
 class minute_data():
 
     def __init__(self):
-        self.min_data = {'date':[], 'open':[], 'high':[], 'low':[], 'close':[], 'volume':[], 'trade_volume':[]}
-        
         self.ocx = QAxWidget("KHOPENAPI.KHOpenAPICtrl.1")
         print("연결 완료")
 
@@ -26,6 +24,8 @@ class minute_data():
         
 
     def rq_mindata(self, itemcode, tic, justify):
+        self.min_data = {'date':[], 'open':[], 'high':[], 'low':[], 'close':[], 'volume':[], 'trade_volume':[]}
+
         self.ocx.dynamicCall("SetInputValue(Qstring, Qstring)", "종목코드", itemcode)
         self.ocx.dynamicCall("SetInputValue(Qstring, Qstring)", "틱범위", tic)
         self.ocx.dynamicCall("SetInputValue(Qstring, Qstring)", "수정주가구분", justify)
@@ -49,6 +49,11 @@ class minute_data():
         else:
             print("로그인 실패")
         self.login_event_loop.exit()
+        print("로그인 루프 종료")
+
+    def GetCommData(self, trcode, recordname, index, itemname):
+        result = self.ocx.dynamicCall("GetCommData(Qstring, Qstring, int, Qstring)", trcode, recordname, index, itemname)
+        return result
 
     def opt10080(self, trcode, recordname):
         getrepeatcnt = self.ocx.dynamicCall("GetRepeatCnt(Qstring, Qstring)", trcode, recordname)
@@ -71,13 +76,17 @@ class minute_data():
             self.min_data['trade_volume'].append(trade_volume)
 
     def OnReceiveTrData(self, scrno, rqname, trcode, recordname, prenext):
-        #print("스크린 번호: ", scrno)
-        #print("rqname:", rqname)
-        #print("tr 코드 name:", trcode)
-        #print("record name:", recordname)
-        #print("prenext:", prenext)
+        if prenext == '2':
+            self.remained_data = True
+        elif prenext != '2':
+            self.remained_data = False
+
         if rqname == 'rqname_opt10080':
-            self.opt10080(trcode, recordname) # 여기서 오류
+            self.opt10080(trcode, recordname)
+        try:
+            self.tr_event_loop.exit() # 여기서 무한 루프
+        except AttributeError:
+            pass
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
