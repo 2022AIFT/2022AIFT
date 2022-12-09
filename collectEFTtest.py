@@ -16,11 +16,10 @@ class minute_data():
 
         self.ocx.dynamicCall("CommConnect()")
         self.login_event_loop = QEventLoop()
-        print("loop 빠져나가기가 안 됨")
-        self.login_event_loop.exec_()
-        print("그래서 이 부분 실행 X")
-
         self.ocx.OnEventConnect.connect(self.OnEventConnect) # 로그인
+        self.login_event_loop.exec_() # OneventConnect 함수에서 self.login_event_loop.exit() 실행되면 exec 실행
+
+        
         self.ocx.OnReceiveTrData.connect(self.OnReceiveTrData) # TR 데이터 받음
 
         
@@ -49,7 +48,7 @@ class minute_data():
             print("로그인 성공")
         else:
             print("로그인 실패")
-        #self.login_event_loop.exite()
+        self.login_event_loop.exit()
 
     def opt10080(self, trcode, recordname):
         getrepeatcnt = self.ocx.dynamicCall("GetRepeatCnt(Qstring, Qstring)", trcode, recordname)
@@ -72,18 +71,17 @@ class minute_data():
             self.min_data['trade_volume'].append(trade_volume)
 
     def OnReceiveTrData(self, scrno, rqname, trcode, recordname, prenext):
-        print("스크린 번호: ", scrno)
-        print("rqname:", rqname)
-        print("tr 코드 name:", trcode)
-        print("record name:", recordname)
-        print("prenext:", prenext)
+        #print("스크린 번호: ", scrno)
+        #print("rqname:", rqname)
+        #print("tr 코드 name:", trcode)
+        #print("record name:", recordname)
+        #print("prenext:", prenext)
         if rqname == 'rqname_opt10080':
-            self.opt10080(trcode, recordname)
+            self.opt10080(trcode, recordname) # 여기서 오류
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     min = minute_data()
-
     min.rq_mindata("069500", 1, 1)
     df_min_data = pandas.DataFrame(min.min_data, columns=['date', 'open', 'high', 'low', 'close', 'volume', 'trade_volume'])
     print(df_min_data)
