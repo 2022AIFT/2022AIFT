@@ -97,8 +97,8 @@ if __name__ == "__main__":
     kodex200 = minute_data()
     kodex200.rq_mindata("069500", 1, 1) # 종목코드, 틱범위, 구분
     df_kodex200 = pandas.DataFrame(kodex200.min_data, columns=['date', 'open', 'high', 'low', 'close', 'volume', 'trade_volume'])
-    df_kodex200.to_csv('collectKODEX200')
+    df_kodex200.to_csv('collectKODEX200.csv')
     kodexInverse = minute_data()
     kodexInverse.rq_mindata("114800", 1, 1)
     df_kodexInverse = pandas.DataFrame(kodexInverse.min_data, columns=['date', 'open', 'high', 'low', 'close', 'volume', 'trade_volume'])
-    df_kodexInverse.to_csv('collectKODEXInverse')
+    df_kodexInverse.to_csv('collectKODEXInverse.csv')
