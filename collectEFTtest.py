@@ -10,7 +10,6 @@ class minute_data():
 
     def __init__(self):
         self.ocx = QAxWidget("KHOPENAPI.KHOpenAPICtrl.1")
-        print("연결 완료")
 
         self.ocx.dynamicCall("CommConnect()")
         self.login_event_loop = QEventLoop()
@@ -74,6 +73,8 @@ class minute_data():
             self.min_data['close'].append(close)
             self.min_data['volume'].append(volume)
             self.min_data['trade_volume'].append(trade_volume)
+            if i==100:
+                print(close)
 
     def OnReceiveTrData(self, scrno, rqname, trcode, recordname, prenext):
         if prenext == '2':
@@ -91,6 +92,6 @@ class minute_data():
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     min = minute_data()
-    min.rq_mindata("069500", 1, 1)
+    min.rq_mindata("069500", 1, 1) # 종목코드, 틱범위, 구분
     df_min_data = pandas.DataFrame(min.min_data, columns=['date', 'open', 'high', 'low', 'close', 'volume', 'trade_volume'])
     print(df_min_data)
