@@ -19,8 +19,21 @@ class minute_data():
         
         self.ocx.OnReceiveTrData.connect(self.OnReceiveTrData) # TR 데이터 받음
 
-        
-        
+    remained_data = True
+
+    def OnReceiveTrData(self, scrno, rqname, trcode, recordname, prenext):
+        if prenext == '2':
+            self.remained_data = True
+        elif prenext != '2':
+            self.remained_data = False
+
+        if rqname == 'rqname_opt10080':
+            self.opt10080(trcode, recordname)
+        try:
+            self.tr_event_loop.exit()
+        except AttributeError:
+            pass
+
 
     def rq_mindata(self, itemcode, tic, justify):
         self.min_data = {'date':[], 'open':[], 'high':[], 'low':[], 'close':[], 'volume':[], 'trade_volume':[]}
@@ -32,8 +45,9 @@ class minute_data():
         self.ocx.dynamicCall("CommRqData(Qstring, Qstring, int, Qstring)", "rqname_opt10080", "opt10080", 0, "0101")
         self.tr_event_loop = QEventLoop()
         self.tr_event_loop.exec_()
+        time.sleep(0.5)
 
-        while self.remained_data == True:
+        while (self.remained_data == True):
             self.ocx.dynamicCall("SetInputValue(Qstring, Qstring)", "종목코드", itemcode)
             self.ocx.dynamicCall("SetInputValue(Qstring, Qstring)", "틱범위", tic)
             self.ocx.dynamicCall("SetInputValue(Qstring, Qstring)", "수정주가구분", justify)
@@ -41,6 +55,7 @@ class minute_data():
             self.ocx.dynamicCall("CommRqData(Qstring, Qstring, int, Qstring)", "rqname_opt10080", "opt10080", 2, "0101")
             self.tr_event_loop = QEventLoop()
             self.tr_event_loop.exec_()
+            time.sleep(0.5)
 
     def OnEventConnect(self, erro_code):
         if erro_code == 0:
@@ -73,26 +88,17 @@ class minute_data():
             self.min_data['close'].append(close)
             self.min_data['volume'].append(volume)
             self.min_data['trade_volume'].append(trade_volume)
-            if i==100:
-                print(close)
 
-    def OnReceiveTrData(self, scrno, rqname, trcode, recordname, prenext):
-        if prenext == '2':
-            self.remained_data = True
-        elif prenext != '2':
-            self.remained_data = False
+            
 
-        if rqname == 'rqname_opt10080':
-            self.opt10080(trcode, recordname)
-        try:
-            self.tr_event_loop.exit()
-        except AttributeError:
-            pass
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    min = minute_data()
-    min.rq_mindata("069500", 1, 1) # 종목코드, 틱범위, 구분
-    # 받아오는 양이 너무 많아서 이 밑으로 실행 안 됨
-    df_min_data = pandas.DataFrame(min.min_data, columns=['date', 'open', 'high', 'low', 'close', 'volume', 'trade_volume'])
-    print(df_min_data)
+    kodex200 = minute_data()
+    kodex200.rq_mindata("069500", 1, 1) # 종목코드, 틱범위, 구분
+    df_kodex200 = pandas.DataFrame(kodex200.min_data, columns=['date', 'open', 'high', 'low', 'close', 'volume', 'trade_volume'])
+    df_kodex200.to_csv('collectKODEX200')
+    kodexInverse = minute_data()
+    kodexInverse.rq_mindata("114800", 1, 1)
+    df_kodexInverse = pandas.DataFrame(kodexInverse.min_data, columns=['date', 'open', 'high', 'low', 'close', 'volume', 'trade_volume'])
+    df_kodexInverse.to_csv('collectKODEXInverse')
