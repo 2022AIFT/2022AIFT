@@ -32,6 +32,28 @@ set_d='20221109'
 
 df_min = kiwoom.block_request(tr, 종목코드=code, 기준일자=set_d, 틱범위=1, output='주식분봉차트조회요청', next=0)
 
+
+# - 삭제
+df_min['현재가'] = df_min['현재가'].str.replace('-','')
+df_min['현재가'] = df_min['현재가'].astype('int')
+
+df_min['거래량'] = df_min['거래량'].astype('int')
+
+df_min['시가'] = df_min['시가'].str.replace('-','')
+df_min['시가'] = df_min['시가'].astype('int')
+
+
+df_min['고가'] = df_min['고가'].str.replace('-','')
+df_min['고가'] = df_min['고가'].astype('int')
+
+df_min['저가'] = df_min['저가'].str.replace('-','')
+df_min['저가'] = df_min['저가'].astype('int')
+
+df_min['체결시간'] = pd.to_datetime(df_min['체결시간'], format='%Y%m%d%H%M%S', errors='raise')
+
+df_min=df_min.drop(['수정주가구분', '수정비율', '대업종구분', '소업종구분', '종목정보', '수정주가이벤트', '전일종가'], axis=1)
+
+
 # 오늘 날짜 획득
 dt_now = datetime.datetime.now()
 # date='2022-12-09'
@@ -42,8 +64,12 @@ df_min=df_min[(df_min['체결시간'] >= pd.to_datetime(date+' 09:00:00')) & (df
 df_min=df_min.sort_values(by='체결시간')
 
 print(df_min.info())
+print(df_min.head())
+print(df_min.tail())
 
 df_min.to_csv('분봉데이터.csv')
 
 end_time=time.time()
 elapsed_time=end_time-start_time
+msg="데이터 수집 시간(분): "+"%0.1f\n-----------------------------"%(elapsed_time/60)
+print(msg)
