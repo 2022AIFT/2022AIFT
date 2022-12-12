@@ -3,7 +3,6 @@ from PyQt5.QtWidgets import *
 from pykiwoom import *
 from pykiwoom.kiwoom import Kiwoom
 
-
 class MyWindow(QMainWindow):
     def __init__(self):
         super().__init__()
